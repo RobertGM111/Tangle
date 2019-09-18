@@ -20,11 +20,14 @@
 #'
 #' @param x A vector of equally spaced time series data.
 #' @param tau Integer value for time lag associated with Takens' embedding matrix.
-#' @param eps A small value for determining if the untangling procedure should terminate.
+#' @param eps A small positive value for determining if the untangling procedure should terminate.
+#' @param returnMats Boolean for determining if both tangled embedding matrix and untangled matrix are returned as well. If false only tangleVal is returned.
 #' @return A list containing
 #' \itemize{
+#'   \item untangledMatrix - The original "tangled" embedding matrix.
 #'   \item untangledMatrix - The final "untangled" embedding matrix.
 #'   \item tangleVal - The tangle value of \code(x).
+#'
 #' }
 #' @examples
 #' # Generate data from Lorenz attractor
@@ -42,7 +45,7 @@
 #' tangle(lorTS, tau = lorTau)
 
 
-tangle <- function(x, tau = NA, eps = 5e-2){
+tangle <- function(x, tau = NA, eps = 5e-2, returnMats = TRUE){
   # Error catch
 
   if (!is.vector(x)){
@@ -65,6 +68,7 @@ tangle <- function(x, tau = NA, eps = 5e-2){
   # Tangle Calculation
   xMat <- nonlinearTseries::buildTakens(x, 3, tau) # Embed time series
   xMat <- scale(xMat) # Scale time series
+  xMat_0 <- xMat
 
   ## Generate "upshift" matrix
   N <- nrow(xMat)
@@ -95,9 +99,12 @@ tangle <- function(x, tau = NA, eps = 5e-2){
 
   tang <- log(Ku) / length(x)
 
-  res <- list(xMat,tang)
-
-  names(res) <- c("untangledMatrix","tangleVal")
+  if (returnMats == TRUE){
+  res <- list(xMat_0,xMat,tang)
+  names(res) <- c("tangledMatrix","untangledMatrix","tangleVal")
+  } else if (returnMats == FALSE){
+    res <- tang
+  }
 
   return(res)
 
