@@ -63,7 +63,7 @@ tangle <- function(x, tau = NA, eps = 5e-2){
 
 
   # Tangle Calculation
-  xMat <- buildTakens(x, 3, tau) # Embed time series
+  xMat <- nonlinearTseries::buildTakens(x, 3, tau) # Embed time series
   xMat <- scale(xMat) # Scale time series
 
   ## Generate "upshift" matrix
@@ -76,9 +76,9 @@ tangle <- function(x, tau = NA, eps = 5e-2){
   Ku <- 1
   xMatprev <- xMat
 
-  while(dim(convhulln(cbind(xMat[,1], xMat[,2])))[1] !=N &
-        dim(convhulln(cbind(xMat[,1], xMat[,3])))[1] !=N &
-        dim(convhulln(cbind(xMat[,2], xMat[,3])))[1] !=N){
+  while(dim(geometry::convhulln(cbind(xMat[,1], xMat[,2])))[1] !=N &
+        dim(geometry::convhulln(cbind(xMat[,1], xMat[,3])))[1] !=N &
+        dim(geometry::convhulln(cbind(xMat[,2], xMat[,3])))[1] !=N){
 
     xMat <- W %*% xMat
     xMat <- scale(xMat)
