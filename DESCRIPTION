@@ -9,6 +9,5 @@ Description: Tangle is a newly defined metric for modeling complexity wihin a ti
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-Imports:
-    nonlinearTseries,
-    geometry
+Imports: nonlinearTseries, geometry
+RoxygenNote: 6.1.1
