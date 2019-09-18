@@ -1,0 +1,14 @@
+Package: Tangle
+Type: Package
+Title: Calcuates Tangle of a Time Series
+Version: 0.1.0
+Authors@R: person("Robert", "Moulder", email = "rgm4fd@virginia.edu",
+  role = c("aut", "cre"))
+Maintainer: The package maintainer <RobertGM111@gmail.com>
+Description: Tangle is a newly defined metric for modeling complexity wihin a time series. Tangle measures deviation from simple periodic motion over time though iterative untangling
+License: GPL (>= 3)
+Encoding: UTF-8
+LazyData: true
+Imports:
+    nonlinearTseries,
+    geometry
