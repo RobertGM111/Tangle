@@ -21,7 +21,11 @@
 #' @param x A vector of equally spaced time series data.
 #' @param tau Integer value for time lag associated with Takens' embedding matrix.
 #' @param eps A small value for determining if the untangling procedure should terminate.
-#' @return The tangle of \code{x}
+#' @return A list containing
+#' \itemize{
+#'   \item untangledMatrix - The final "untangled" embedding matrix.
+#'   \item tangleVal - The tangle value of \code(x).
+#' }
 #' @examples
 #' # Generate data from Lorenz attractor
 #' library(nonlinearTseries)
@@ -89,6 +93,12 @@ tangle <- function(x, tau = NA, eps = 5e-2){
     xMatprev <- xMat
   }
 
-  return(log(Ku) / length(x))
+  tang <- log(Ku) / length(x)
+
+  res <- list(xMat,tang)
+
+  names(res) <- c("untangledMatrix","tangleVal")
+
+  return(res)
 
 }

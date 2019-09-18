@@ -11,39 +11,89 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+library(nonlinearTseries)
 ```
 # Tangle
 
-The goal of Tangle is to ...
+Tangle is a means of quantifying complexity in relatively short time series data. 
 
 ## Installation
 
-You can install the released version of Tangle from [CRAN](https://CRAN.R-project.org) with:
+You can install a development version of Tangle from [github](https://github.com) with:
 
 ``` r
-install.packages("Tangle")
+library(devtools)
+install_github("RobertGM111/Tangle")
 ```
+
+## Visual
+
+Tangle algorithm in process: (a) 0 iterations, (b) 500 iterations, and (c) 10,000 iterations.
+```{r visual, echo=FALSE}
+par(mai=c(.1,.1,.2,.1))
+par(mfrow=c(1,3))
+
+#XP <- read.csv("~/Documents/APS2016/XP.csv")
+XP <- lorenz(time = seq(0,100,.01), do.plot = FALSE)
+# tau.ami = timeLag(XP$x, technique = "ami",
+#                   lag.max = 100, do.plot = FALSE)
+# emb.dim = estimateEmbeddingDim(XP$x, time.lag = tau.ami,
+#                                max.embedding.dim = 15,do.plot = FALSE)
+tak = cbind(XP$x,XP$y,XP$z)
+plot(x=NULL, y=NULL, type="n", xlab=NA, ylab=NA,
+     xlim=c(-3, 3), ylim=c(-3, 3),frame=FALSE,main="a",
+     xaxt='n', yaxt='n')
+lines(scale(XP$x), scale(XP$z), col=rgb(0,0,0,.8),lwd=1)
+
+XP <- lorenz(time = seq(0,100,.05), do.plot = FALSE)
+# tau.ami = timeLag(XP$x, technique = "ami",
+#                   lag.max = 100, do.plot = FALSE)
+# emb.dim = estimateEmbeddingDim(XP$x, time.lag = tau.ami,
+#                                max.embedding.dim = 15,do.plot = FALSE)
+tak = cbind(XP$x,XP$y,XP$z)
+
+N<-nrow(tak)# Number of samples
+S<-diag(N) # Generate "upshift" matrix
+S<-S[,c(dim(S)[2],(1:(dim(S)[2]-1)))]
+W<-((diag(N)+S)/2)# Generate Updating matrix
+
+for (i in 1:500){
+  tak <- W%*%tak
+  tak <- scale(tak)
+}
+
+plot(x=NULL, y=NULL, type="n", xlab=NA, ylab=NA,
+     xlim=c(-3, 3), ylim=c(-3, 3),frame=FALSE,main="b",
+     xaxt='n', yaxt='n')
+lines(scale(tak[,1]), scale(tak[,3]), col=rgb(0,0,0,.8),lwd=1)
+
+for (i in 1:10000){
+  tak <- W%*%tak
+  tak <- scale(tak)
+}
+plot(x=NULL, y=NULL, type="n", xlab=NA, ylab=NA,
+     xlim=c(-3, 3), ylim=c(-3, 3),frame=FALSE,main="c",
+     xaxt='n', yaxt='n')
+lines(scale(tak[,1]), scale(tak[,3]), col=rgb(0,0,0,.8),lwd=1)
+```
+
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Example use of tangle on a simulated time series
 
-```{r example}
-## basic example code
+```{r example, eval = FALSE}
+# Generate data from Lorenz attractor
+library(nonlinearTseries)
+lorTS <- lorenz(do.plot = FALSE)$x
+
+# Downsample for example speed
+samps <- seq(1, length(lorTS), length.out = 500)
+lorTS <- lorTS[samps]
+
+# Estimate tau
+lorTau <- timeLag(lorTS)
+
+# Calculate Tangle
+tangle(lorTS, tau = lorTau)
 ```
-
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
