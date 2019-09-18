@@ -4,17 +4,25 @@
 \alias{tangle}
 \title{Calculate Tangle}
 \usage{
-tangle(x, tau = NA, eps = 0.05)
+tangle(x, tau = NA, eps = 0.05, returnMats = TRUE)
 }
 \arguments{
 \item{x}{A vector of equally spaced time series data.}
 
-\item{tau}{Integer value for time lag associated with Takens' embedding matrix.}
+\item{tau}{Positive integer value for time lag associated with Takens' embedding matrix.}
 
-\item{eps}{A small value for determining if the untangling procedure should terminate.}
+\item{eps}{A small positive value for determining if the untangling procedure should terminate.}
+
+\item{returnMats}{Boolean for determining if both tangled embedding matrix and untangled matrix are returned as well. If FALSE only tangleVal is returned.}
 }
 \value{
-The tangle of \code{x}
+A list containing
+\itemize{
+  \item untangledMatrix - The original "tangled" embedding matrix.
+  \item untangledMatrix - The final "untangled" embedding matrix.
+  \item tangleVal - The tangle value of \code{x}.
+
+}
 }
 \description{
 Tangle is an interative unfolding algorithm which measures complexity of a time series by forcing a 3-dimension embedding of this time series into an ellipse.

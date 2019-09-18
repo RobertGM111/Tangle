@@ -19,14 +19,14 @@
 #' Tangle is an interative unfolding algorithm which measures complexity of a time series by forcing a 3-dimension embedding of this time series into an ellipse.
 #'
 #' @param x A vector of equally spaced time series data.
-#' @param tau Integer value for time lag associated with Takens' embedding matrix.
+#' @param tau Positive integer value for time lag associated with Takens' embedding matrix.
 #' @param eps A small positive value for determining if the untangling procedure should terminate.
-#' @param returnMats Boolean for determining if both tangled embedding matrix and untangled matrix are returned as well. If false only tangleVal is returned.
+#' @param returnMats Boolean for determining if both tangled embedding matrix and untangled matrix are returned as well. If FALSE only tangleVal is returned.
 #' @return A list containing
 #' \itemize{
 #'   \item untangledMatrix - The original "tangled" embedding matrix.
 #'   \item untangledMatrix - The final "untangled" embedding matrix.
-#'   \item tangleVal - The tangle value of \code(x).
+#'   \item tangleVal - The tangle value of \code{x}.
 #'
 #' }
 #' @examples

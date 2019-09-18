@@ -24,6 +24,7 @@ You can install a development version of Tangle from [github](https://github.com
 ``` r
 library(devtools)
 install_github("RobertGM111/Tangle")
+library(Tangle)
 ```
 
 ## Visual
